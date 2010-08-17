@@ -86,10 +86,17 @@
           dx = 0;
         }
 
-        $items.css({
-          "-webkit-transition": "-webkit-transform " + Math.min(500, Math.max(200, dt)) + "ms ease-in-out",
-          "-webkit-transform": "translate3d(" + x + "px,0,0) translate3d(" + dx + "px,0,0)"
-        });
+        if ($.fx.off) {
+          $items.css({
+            "-webkit-transition": null,
+            "-webkit-transform": "translate3d(" + dx + "px,0,0)"
+          });
+        } else {
+          $items.css({
+            "-webkit-transition": "-webkit-transform " + Math.min(500, Math.max(200, dt)) + "ms ease-in-out",
+            "-webkit-transform": "translate3d(" + x + "px,0,0) translate3d(" + dx + "px,0,0)"
+          });
+        }
 
         x += dx;
         $(document).trigger("whirligig.change", [itemWidth ? Math.abs(x / itemWidth) : 0]);
