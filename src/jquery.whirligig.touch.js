@@ -99,7 +99,7 @@
         }
 
         x += dx;
-        $(document).trigger("whirligig.change", [itemWidth ? Math.abs(x / itemWidth) : 0]);
+        $self.trigger("whirligig.change", [itemWidth ? Math.abs(x / itemWidth) : 0]);
       }
 
       function touchStart(event) {
