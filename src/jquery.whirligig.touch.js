@@ -22,7 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 */
-;(function($) {
+(function($) {
   $.fn.extend({
     whirligig: function(options) {
       options = options || {};
@@ -58,7 +58,8 @@
       }
 
       function updateXOffset(dx, lastDx) {
-        var dt = Date.now() - startTime;
+        if(lastDx == undefined) { lastDx = dx; }
+        var dt = Date.now() - (startTime || 0);
 
         if (options.snap) {
           if (Math.abs(lastDx) >= options.snap) {
