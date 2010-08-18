@@ -37,6 +37,7 @@
       var startX, startTime;
       var x = 0;
       var xValues;
+      var autoAdvanceInterval;
 
       var itemWidth = options.itemWidth;
 
@@ -82,14 +83,14 @@
         if (x + dx == itemWidth) {
           dx = 0;
         }
-        if (Math.abs(x + dx) > itemWidth * ($items.length - 1)) {
+        if (Math.abs(x + dx) > itemWidth * (Math.ceil($self.width() / itemWidth) - 1)) {
           dx = 0;
         }
 
         if ($.fx.off) {
           $items.css({
             "-webkit-transition": null,
-            "-webkit-transform": "translate3d(" + dx + "px,0,0)"
+            "-webkit-transform": "translate3d(" + (x + dx) + "px,0,0)"
           });
         } else {
           $items.css({
@@ -109,10 +110,11 @@
         startX = event.touches[0].pageX;
         startTime = Date.now();
         xValues = [];
+        stopAutoAdvance();        
       }
 
       function touchEnd(event) {
-        var lastDx = xValues.length > 1 ? xValues[xValues.length-1] - xValues[xValues.length-2] : null;
+        var lastDx = xValues.length > 1 ? xValues[xValues.length - 1] - xValues[xValues.length - 2] : null;
         updateXOffset(event.changedTouches[0].pageX - startX, lastDx);
       }
 
@@ -132,6 +134,23 @@
         });
       }
 
+      function doAutoAdvance() {
+        $self.trigger('whirligig.advanceRight');
+      }
+
+      function startAutoAdvance() {
+        if (options.autoAdvance) {
+          autoAdvanceInterval = setInterval(doAutoAdvance, options.autoAdvance);
+        }
+      }
+
+      function stopAutoAdvance() {
+        if (autoAdvanceInterval) {
+          clearInterval(autoAdvanceInterval);
+          autoAdvanceInterval = null;
+        }
+      }
+
       updateItemWidth();
       $self.landscape(updateItemWidth).portrait(updateItemWidth).each(function() {
         this.addEventListener('touchstart', touchStart, false);
@@ -148,6 +167,7 @@
         }
         updateXOffset(itemWidth);
       });
+      startAutoAdvance();
 
       return this;
     }

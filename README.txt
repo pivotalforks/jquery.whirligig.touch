@@ -1,5 +1,16 @@
 # jquery.whirligig.touch
 
+## Usage
+
+$("ol.stuff").whirligig()
+
+## Options
+
+itemWidth: Item width in pixels  (default: width of first item)
+snap: Number of pixels required to trigger a "snap" movement  (default: disabled)
+autoAdvance: Time in ms before automatically invoking the "advanceRight" event (default: disabled)
+stopPropagation: stops touch event from propagating to parent containers (default: false)
+
 ## License
 
 jQuery Whirligig Touch

@@ -242,5 +242,40 @@ describe("whirligig", function() {
         });
       });
     });
+
+    describe("when autoadvance enabled", function() {
+      beforeEach(function() {
+        jasmine.Clock.useMock();
+        jasmine.Clock.reset();
+        $.fx.off = true;        
+        setupCarousel({autoAdvance: 1000, itemWidth: 500});
+      });
+
+      it("should trigger advanceRight every specified interval", function() {
+        expect($items.eq(0).position().left).toBe(0);
+        jasmine.Clock.tick(1000);
+
+        expect($items.eq(0).position().left).toBeLessThan(0);
+      });
+
+      it("should stop at the end of the carousel", function() {
+        expect($items.first().position().left).toBe(0);
+        jasmine.Clock.tick(10000);
+        expect($items.css("-webkit-transform")).toEqual("translate3d(-1000px, 0px, 0px)");
+      });
+
+      it("should stop if significant touch activity occurs", function() {
+        expect($items.eq(0).position().left).toBe(0);
+
+        touchStart({touches: [{pageX: 0}]});
+        touchMove({touches: [{pageX: -20}]});
+        touchMove({touches: [{pageX: -40}]});
+        touchEnd({changedTouches: [{pageX: -40}]});
+
+        var selectedPosition = $items.eq(0).position().left;
+        jasmine.Clock.tick(10000);
+        expect($items.eq(0).position().left).toBe(selectedPosition);
+      });
+    });
   });
 });
